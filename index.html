@@ -21,4 +21,85 @@
             100% { opacity: 1; }
         }
         #console {
-       
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            animation: shake 0.5s infinite; /* Shake effect */
+            backdrop-filter: blur(5px); /* Add blur effect for better visibility */
+        }
+        @keyframes shake {
+            0% { transform: translate(0); }
+            25% { transform: translate(-5px, 0); }
+            50% { transform: translate(5px, 0); }
+            75% { transform: translate(-5px, 0); }
+            100% { transform: translate(0); }
+        }
+        #countdown {
+            font-size: 30px;
+            margin-top: 20px;
+        }
+        button {
+            font-size: 20px;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: crimson; /* Button color */
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: darkred; /* Change color on hover */
+        }
+    </style>
+</head>
+<body>
+    <div id="console">
+        <div>Initializing ERROR ROOM...</div>
+        <div>Accessing system files...</div>
+        <div>Running diagnostics...</div>
+        <div id="countdown"></div>
+        <div>ERROR: Malicious activity detected!</div>
+        <div id="choice" style="display: none;">
+            <div>Which friend to save?</div>
+            <button onclick="saveFriend('Hea')">Save Hea</button>
+            <button onclick="saveFriend('Tiyo')">Save Tiyo</button>
+        </div>
+    </div>
+    <audio id="bg-audio" autoplay loop>
+        <source src="your-sound-url.mp3" type="audio/mpeg">
+    </audio>
+    <audio id="alert-audio" src="your-alert-sound-url.mp3" preload="auto"></audio>
+    <audio id="siren-audio" src="your-siren-sound-url.mp3" preload="auto"></audio>
+    <script>
+        let countdown = 10; // Countdown time in seconds
+        const countdownElement = document.getElementById('countdown');
+
+        const interval = setInterval(() => {
+            if (countdown <= 0) {
+                clearInterval(interval);
+                document.getElementById('choice').style.display = 'block'; // Show choice buttons
+                countdownElement.innerHTML = "";
+                document.getElementById('alert-audio').play(); // Play alert sound
+            } else {
+                countdownElement.innerHTML = countdown + " seconds remaining...";
+            }
+            countdown--;
+        }, 1000);
+
+        function saveFriend(friend) {
+            alert(friend + " has been saved!");
+            countdownElement.innerHTML = "HACK SUCCESSFUL!";
+            document.getElementById('bg-audio').pause(); // Stop background audio
+            document.getElementById('siren-audio').play(); // Play siren sound
+        }
+    </script>
+</body>
+</html>
