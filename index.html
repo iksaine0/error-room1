@@ -20,6 +20,13 @@
             50% { opacity: 0.8; }
             100% { opacity: 1; }
         }
+        @keyframes glitch {
+            0% { opacity: 1; }
+            25% { opacity: 0.8; }
+            50% { opacity: 1; }
+            75% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
         #console {
             position: absolute;
             top: 0;
@@ -31,15 +38,8 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            animation: shake 0.5s infinite; /* Shake effect */
+            animation: glitch 0.1s infinite; /* Flicker effect */
             backdrop-filter: blur(5px); /* Add blur effect for better visibility */
-        }
-        @keyframes shake {
-            0% { transform: translate(0); }
-            25% { transform: translate(-5px, 0); }
-            50% { transform: translate(5px, 0); }
-            75% { transform: translate(-5px, 0); }
-            100% { transform: translate(0); }
         }
         #countdown {
             font-size: 30px;
@@ -58,12 +58,19 @@
         button:hover {
             background-color: darkred; /* Change color on hover */
         }
+        .loading {
+            animation: loading 1s infinite;
+        }
+        @keyframes loading {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
     <div id="console">
         <div>Initializing ERROR ROOM...</div>
-        <div>Accessing system files...</div>
+        <div class="loading">🖥️ Loading system files...</div>
         <div>Running diagnostics...</div>
         <div id="countdown"></div>
         <div>ERROR: Malicious activity detected!</div>
@@ -74,17 +81,24 @@
         </div>
     </div>
     <audio id="bg-audio" autoplay loop>
-        <source src="your-sound-url.mp3" type="audio/mpeg">
+        <source src="your-background-sound-url.mp3" type="audio/mpeg">
     </audio>
     <audio id="alert-audio" src="your-alert-sound-url.mp3" preload="auto"></audio>
     <audio id="siren-audio" src="your-siren-sound-url.mp3" preload="auto"></audio>
+    <audio id="typing-sound" src="your-typing-sound-url.mp3" preload="auto"></audio>
     <script>
         let countdown = 10; // Countdown time in seconds
         const countdownElement = document.getElementById('countdown');
 
+        // Play typing sound
+        const typingInterval = setInterval(() => {
+            document.getElementById('typing-sound').play();
+        }, 3000); // Play every 3 seconds
+
         const interval = setInterval(() => {
             if (countdown <= 0) {
                 clearInterval(interval);
+                clearInterval(typingInterval); // Stop typing sound
                 document.getElementById('choice').style.display = 'block'; // Show choice buttons
                 countdownElement.innerHTML = "";
                 document.getElementById('alert-audio').play(); // Play alert sound
