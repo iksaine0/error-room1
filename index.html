@@ -122,4 +122,34 @@
             choiceElement.innerHTML = `
                 <div>You chose to save ${firstChoice} and ${secondChoice}. Final choice:</div>
                 <button onclick="creepyEnding('${firstChoice}', '${secondChoice}', 'YOU')">You</button>
-                <button onclick="cree
+                <button onclick="creepyEnding('${firstChoice}', '${secondChoice}', 'Paul')">Paul</button>
+            `;
+        }
+
+        function creepyEnding(friend1, friend2, finalChoice) {
+            choiceElement.style.display = 'none';
+            resultElement.style.display = 'block';
+            resultElement.innerHTML = `You chose to save ${finalChoice}. `;
+            resultElement.innerHTML += `
+                <div>The system glitches... A chilling voice echoes: "You have a bot's protection, please turn it off."</div>
+                <div>All systems are failing. Your fate is sealed.</div>
+            `;
+            document.getElementById('alert-audio').play(); // Play alert sound
+
+            // Adding a countdown to escape
+            countdown = 5;
+            countdownElement.style.display = 'block';
+            const escapeInterval = setInterval(() => {
+                if (countdown <= 0) {
+                    clearInterval(escapeInterval);
+                    resultElement.innerHTML += "<div>Too late. You are trapped forever.</div>";
+                    // Additional creepy audio or visuals can be added here
+                } else {
+                    countdownElement.innerHTML = "Escape countdown: " + countdown;
+                }
+                countdown--;
+            }, 1000);
+        }
+    </script>
+</body>
+</html>
