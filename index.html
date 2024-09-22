@@ -84,7 +84,20 @@
             countdown--;
         }, 1000);
 
+        function goFullScreen() {
+            if (document.documentElement.requestFullscreen) {
+                document.documentElement.requestFullscreen();
+            } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+                document.documentElement.mozRequestFullScreen();
+            } else if (document.documentElement.webkitRequestFullscreen) { // Chrome, Safari and Opera
+                document.documentElement.webkitRequestFullscreen();
+            } else if (document.documentElement.msRequestFullscreen) { // IE/Edge
+                document.documentElement.msRequestFullscreen();
+            }
+        }
+
         function showChoices() {
+            goFullScreen(); // Make the screen full size when choices show up
             choiceElement.style.display = 'block';
             choiceElement.innerHTML = `
                 <div>Which friend to save?</div>
@@ -99,7 +112,9 @@
                 "System breach detected! Security protocols engaged.",
                 "An unknown entity is watching you.",
                 "Error: Unrecognized command.",
-                "Warning: Data corruption imminent!"
+                "Warning: Data corruption imminent!",
+                "Malicious code detected in your system.",
+                "Warning: Unauthorized access attempt!"
             ];
             const randomIndex = Math.floor(Math.random() * events.length);
             randomEventElement.style.display = 'block';
@@ -143,7 +158,7 @@
                 if (countdown <= 0) {
                     clearInterval(escapeInterval);
                     resultElement.innerHTML += "<div>Too late. You are trapped forever.</div>";
-                    // Additional creepy audio or visuals can be added here
+                    document.getElementById('siren-audio').play(); // Play siren sound
                 } else {
                     countdownElement.innerHTML = "Escape countdown: " + countdown;
                 }
