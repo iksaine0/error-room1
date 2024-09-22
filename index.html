@@ -9,7 +9,7 @@
             margin: 0;
             overflow: hidden;
             font-family: 'Courier New', monospace;
-            color: lime;
+            color: red; /* Changed to red for a scarier effect */
             background-color: black;
             animation: flicker 1s infinite;
         }
@@ -29,6 +29,14 @@
             justify-content: center;
             align-items: center;
             text-align: center;
+            animation: shake 0.5s infinite; /* Added shake effect */
+        }
+        @keyframes shake {
+            0% { transform: translate(0); }
+            25% { transform: translate(-5px, 0); }
+            50% { transform: translate(5px, 0); }
+            75% { transform: translate(-5px, 0); }
+            100% { transform: translate(0); }
         }
         #countdown {
             font-size: 30px;
@@ -38,10 +46,14 @@
             font-size: 20px;
             margin: 10px;
             padding: 10px 20px;
-            background-color: lime;
-            color: black;
+            background-color: crimson; /* Darker button color */
+            color: white;
             border: none;
             cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: darkred; /* Change color on hover */
         }
     </style>
 </head>
@@ -58,9 +70,10 @@
             <button onclick="saveFriend('Tiyo')">Save Tiyo</button>
         </div>
     </div>
-    <audio autoplay loop>
+    <audio id="bg-audio" autoplay loop>
         <source src="your-sound-url.mp3" type="audio/mpeg">
     </audio>
+    <audio id="alert-audio" src="your-alert-sound-url.mp3" preload="auto"></audio>
     <script>
         let countdown = 10; // Countdown time in seconds
         const countdownElement = document.getElementById('countdown');
@@ -70,6 +83,7 @@
                 clearInterval(interval);
                 document.getElementById('choice').style.display = 'block'; // Show choice buttons
                 countdownElement.innerHTML = "";
+                document.getElementById('alert-audio').play(); // Play alert sound
             } else {
                 countdownElement.innerHTML = countdown + " seconds remaining...";
             }
@@ -79,6 +93,8 @@
         function saveFriend(friend) {
             alert(friend + " has been saved!");
             countdownElement.innerHTML = "HACK SUCCESSFUL!";
+            document.getElementById('bg-audio').pause(); // Stop background audio
+            document.getElementById('alert-audio').play(); // Play success sound
         }
     </script>
 </body>
