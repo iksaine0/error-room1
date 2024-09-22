@@ -9,22 +9,15 @@
             margin: 0;
             overflow: hidden;
             font-family: 'Courier New', monospace;
-            color: red; /* Text color */
+            color: red;
             background-color: black;
-            background-image: url('your-matrix-background-url.jpg'); /* Matrix background image */
-            background-size: cover; /* Cover the whole screen */
+            background-image: url('your-matrix-background-url.jpg'); /* Matrix background */
+            background-size: cover;
             animation: flicker 1s infinite;
         }
         @keyframes flicker {
             0% { opacity: 1; }
             50% { opacity: 0.8; }
-            100% { opacity: 1; }
-        }
-        @keyframes glitch {
-            0% { opacity: 1; }
-            25% { opacity: 0.8; }
-            50% { opacity: 1; }
-            75% { opacity: 0.5; }
             100% { opacity: 1; }
         }
         #console {
@@ -38,81 +31,91 @@
             justify-content: center;
             align-items: center;
             text-align: center;
-            animation: glitch 0.1s infinite; /* Flicker effect */
-            backdrop-filter: blur(5px); /* Add blur effect for better visibility */
-        }
-        #countdown {
-            font-size: 30px;
-            margin-top: 20px;
+            backdrop-filter: blur(5px);
         }
         button {
             font-size: 20px;
             margin: 10px;
             padding: 10px 20px;
-            background-color: crimson; /* Button color */
+            background-color: crimson;
             color: white;
             border: none;
             cursor: pointer;
             transition: background-color 0.3s;
         }
         button:hover {
-            background-color: darkred; /* Change color on hover */
+            background-color: darkred;
         }
-        .loading {
-            animation: loading 1s infinite;
-        }
-        @keyframes loading {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+        #countdown {
+            font-size: 30px;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
     <div id="console">
         <div>Initializing ERROR ROOM...</div>
-        <div class="loading">🖥️ Loading system files...</div>
         <div>Running diagnostics...</div>
         <div id="countdown"></div>
-        <div>ERROR: Malicious activity detected!</div>
-        <div id="choice" style="display: none;">
-            <div>Which friend to save?</div>
-            <button onclick="saveFriend('Hea')">Save Hea</button>
-            <button onclick="saveFriend('Tiyo')">Save Tiyo</button>
-        </div>
+        <div id="choice" style="display: none;"></div>
+        <div id="result" style="display: none;"></div>
     </div>
     <audio id="bg-audio" autoplay loop>
         <source src="your-background-sound-url.mp3" type="audio/mpeg">
     </audio>
     <audio id="alert-audio" src="your-alert-sound-url.mp3" preload="auto"></audio>
     <audio id="siren-audio" src="your-siren-sound-url.mp3" preload="auto"></audio>
-    <audio id="typing-sound" src="your-typing-sound-url.mp3" preload="auto"></audio>
     <script>
-        let countdown = 10; // Countdown time in seconds
+        let countdown = 10;
         const countdownElement = document.getElementById('countdown');
-
-        // Play typing sound
-        const typingInterval = setInterval(() => {
-            document.getElementById('typing-sound').play();
-        }, 3000); // Play every 3 seconds
+        const choiceElement = document.getElementById('choice');
+        const resultElement = document.getElementById('result');
 
         const interval = setInterval(() => {
             if (countdown <= 0) {
                 clearInterval(interval);
-                clearInterval(typingInterval); // Stop typing sound
-                document.getElementById('choice').style.display = 'block'; // Show choice buttons
                 countdownElement.innerHTML = "";
-                document.getElementById('alert-audio').play(); // Play alert sound
+                showChoices(); // Show choices when countdown ends
             } else {
                 countdownElement.innerHTML = countdown + " seconds remaining...";
             }
             countdown--;
         }, 1000);
 
-        function saveFriend(friend) {
-            alert(friend + " has been saved!");
-            countdownElement.innerHTML = "HACK SUCCESSFUL!";
-            document.getElementById('bg-audio').pause(); // Stop background audio
-            document.getElementById('siren-audio').play(); // Play siren sound
+        function showChoices() {
+            choiceElement.style.display = 'block';
+            choiceElement.innerHTML = `
+                <div>Which friend to save?</div>
+                <button onclick="nextChoice('Hea')">Hea</button>
+                <button onclick="nextChoice('Tiyo')">Tiyo</button>
+            `;
+        }
+
+        function nextChoice(firstChoice) {
+            choiceElement.innerHTML = `
+                <div>You chose to save ${firstChoice}. Who next?</div>
+                <button onclick="finalChoice('${firstChoice}', 'Finn')">Finn</button>
+                <button onclick="finalChoice('${firstChoice}', 'Jasper')">Jasper</button>
+            `;
+        }
+
+        function finalChoice(firstChoice, secondChoice) {
+            choiceElement.innerHTML = `
+                <div>You chose to save ${firstChoice} and ${secondChoice}. Final choice:</div>
+                <button onclick="creepyEnding('${firstChoice}', '${secondChoice}', 'YOU')">You</button>
+                <button onclick="creepyEnding('${firstChoice}', '${secondChoice}', 'Paul')">Paul</button>
+            `;
+        }
+
+        function creepyEnding(friend1, friend2, finalChoice) {
+            choiceElement.style.display = 'none';
+            resultElement.style.display = 'block';
+            resultElement.innerHTML = `You chose to save ${finalChoice}. `;
+            resultElement.innerHTML += `
+                <div>The system glitches... A chilling voice echoes: "You have a bot's protection, please turn it off."</div>
+                <div>All systems are failing. Your fate is sealed.</div>
+            `;
+            document.getElementById('alert-audio').play(); // Play alert sound
         }
     </script>
 </body>
