@@ -34,6 +34,15 @@
             font-size: 30px;
             margin-top: 20px;
         }
+        button {
+            font-size: 20px;
+            margin: 10px;
+            padding: 10px 20px;
+            background-color: lime;
+            color: black;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -43,6 +52,11 @@
         <div>Running diagnostics...</div>
         <div id="countdown"></div>
         <div>ERROR: Malicious activity detected!</div>
+        <div id="choice" style="display: none;">
+            <div>Which friend to save?</div>
+            <button onclick="saveFriend('Hea')">Save Hea</button>
+            <button onclick="saveFriend('Tiyo')">Save Tiyo</button>
+        </div>
     </div>
     <audio autoplay loop>
         <source src="your-sound-url.mp3" type="audio/mpeg">
@@ -50,15 +64,22 @@
     <script>
         let countdown = 10; // Countdown time in seconds
         const countdownElement = document.getElementById('countdown');
+
         const interval = setInterval(() => {
             if (countdown <= 0) {
                 clearInterval(interval);
-                countdownElement.innerHTML = "HACK SUCCESSFUL!";
+                document.getElementById('choice').style.display = 'block'; // Show choice buttons
+                countdownElement.innerHTML = "";
             } else {
                 countdownElement.innerHTML = countdown + " seconds remaining...";
             }
             countdown--;
         }, 1000);
+
+        function saveFriend(friend) {
+            alert(friend + " has been saved!");
+            countdownElement.innerHTML = "HACK SUCCESSFUL!";
+        }
     </script>
 </body>
 </html>
